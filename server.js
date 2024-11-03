@@ -1,38 +1,50 @@
-const http = require('http');
+const express = require('express');
+const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
-const server = http.createServer((req, res) => {
-    if (req.method === 'GET' && req.url.startsWith('/sendData')) {
-        // Extract query parameters
-        const queryObject = url.parse(req.url, true).query;
+const app = express();
 
-        const x = queryObject.x;
-        const y = queryObject.y;
-        const z = queryObject.z;
-        const direction = queryObject.direction;
+// Use CORS middleware
+app.use(cors()); // Allow all origins
 
-        // Here you can process the data as needed, e.g., log it or use it for your application
-        console.log(`Received data: X=${x}, Y=${y}, Z=${z}, Direction=${direction}`);
+// Middleware to parse JSON requests
+app.use(express.json());
 
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.end('Data received successfully');
-    } else if (req.url === '/') {
-        fs.readFile(path.join(__dirname, 'index.html'), (err, content) => {
-            if (err) {
-                res.writeHead(500);
-                res.end('Server Error');
-                return;
-            }
-            res.writeHead(200, { 'Content-Type': 'text/html' });
-            res.end(content);
-        });
-    } else {
-        res.writeHead(404);
-        res.end('Not Found');
-    }
+// Define a route to handle incoming data
+app.get('/sendData', (req, res) => {
+    // Extract query parameters
+    const queryObject = req.query;
+
+    const x = queryObject.x;
+    const y = queryObject.y;
+    const z = queryObject.z;
+    const direction = queryObject.direction;
+
+    // Process the data as needed
+    console.log(`Received data: X=${x}, Y=${y}, Z=${z}, Direction=${direction}`);
+
+    res.status(200).send('Data received successfully');
 });
 
+// Serve the index.html file
+app.get('/', (req, res) => {
+    fs.readFile(path.join(__dirname, 'index.html'), (err, content) => {
+        if (err) {
+            res.status(500).send('Server Error');
+            return;
+        }
+        res.setHeader('Content-Type', 'text/html');
+        res.status(200).end(content);
+    });
+});
+
+// Handle 404 for any other requests
+app.use((req, res) => {
+    res.status(404).send('Not Found');
+});
+
+// Start the server
 const PORT = process.env.PORT || 8080;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
