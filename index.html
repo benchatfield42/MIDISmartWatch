@@ -53,8 +53,8 @@
             8: 523.25  // C5
         };
 
-        function playNoteWithVisual(direction) {
-            const frequency = scaleFrequencies[direction];
+        function playNoteWithVisual(d) {
+            const frequency = scaleFrequencies[d];
             if (!frequency) {
                 console.error("Invalid direction received.");
                 return;
@@ -75,17 +75,17 @@
             oscillator.stop(audioContext.currentTime + 0.5);
 
             // Highlight the key
-            highlightKey(direction);
+            highlightKey(d);
         }
 
-        function highlightKey(direction) {
+        function highlightKey(d) {
             // Remove active class from all keys
             for (let i = 1; i <= 8; i++) {
                 document.getElementById(`key${i}`).classList.remove("active");
             }
 
             // Add active class to the current key
-            const key = document.getElementById(`key${direction}`);
+            const key = document.getElementById(`key${d}`);
             if (key) key.classList.add("active");
 
             // Remove the highlight after 500ms (duration of the note)
@@ -98,9 +98,9 @@
             try {
                 const response = await fetch("http://54.234.131.203:8080/getData");
                 const data = await response.json();
-                const direction = data.direction;
-                if (direction >= 1 && direction <= 8) {
-                    playNoteWithVisual(direction);
+                const d = data.d;
+                if (d >= 1 && d <= 8) {
+                    playNoteWithVisual(d);
                 }
             } catch (error) {
                 console.error("Failed to fetch direction data:", error);

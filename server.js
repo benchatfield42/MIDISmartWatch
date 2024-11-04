@@ -15,12 +15,13 @@ app.use(express.json());
 app.get('/sendData', (req, res) => {
     const queryObject = req.query;
 
+    const latency = quertyObject.l;
     const x = queryObject.x;
     const y = queryObject.y;
     const z = queryObject.z;
-    const direction = queryObject.direction;
+    const direction = queryObject.d;
 
-    console.log(`Received HTTP data: X=${x}, Y=${y}, Z=${z}, Direction=${direction}`);
+    console.log(`Received HTTP data: Latency=${l}, X=${x}, Y=${y}, Z=${z}, Direction=${d}`);
 
     res.status(200).send('Data received successfully');
 });
