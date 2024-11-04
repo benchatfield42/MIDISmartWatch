@@ -90,12 +90,12 @@
             // Remove the highlight after Xms (duration of the note)
             setTimeout(() => {
                 if (key) key.classList.remove("active");
-            }, 100);
+            }, 250);
         }
 
         async function getDirectionData() {
             try {
-                const response = await fetch("http://54.234.131.203:8080/getData");
+                const response = await fetch("http://34.226.193.13:8080/getData");
                 const data = await response.json();
                 const d = data.d;
                 if (d >= 1 && d <= 8) {
@@ -106,8 +106,8 @@
             }
         }
 
-        // Check the server every 30ms for new direction data
-        setInterval(getDirectionData, 30);
+        // Check the server every Xms for new direction data
+        setInterval(getDirectionData, 15);
     </script>
 </body>
 </html>
