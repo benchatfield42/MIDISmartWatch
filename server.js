@@ -27,10 +27,16 @@ app.get('/sendData', (req, res) => {
 
     console.log(`Received HTTP data: Latency=${latency}, X=${x}, Y=${y}, Z=${z}, Direction=${direction}`);
 
-    // Optionally, you can store HTTP data as well
-    udpReceivedData = { latency, x, y, z, direction }; // Store the latest received HTTP data
+    // Store the latest received HTTP data
+    udpReceivedData = { latency, x, y, z, direction };
 
     res.status(200).send('Data received successfully');
+});
+
+// New endpoint to fetch the latest direction data
+app.get('/getData', (req, res) => {
+    // Respond with the latest received data
+    res.json(udpReceivedData);
 });
 
 // Serve the index.html file
@@ -73,7 +79,7 @@ udpServer.on('message', (msg, rinfo) => {
 
     console.log("Processed UDP data:", receivedData);
 
-    // Optionally, store the latest received UDP data globally
+    // Store the latest received UDP data globally
     udpReceivedData = receivedData;
 });
 
