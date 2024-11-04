@@ -87,10 +87,10 @@
             const key = document.getElementById(`key${d}`);
             if (key) key.classList.add("active");
 
-            // Remove the highlight after 30ms (duration of the note)
+            // Remove the highlight after Xms (duration of the note)
             setTimeout(() => {
                 if (key) key.classList.remove("active");
-            }, 30);
+            }, 100);
         }
 
         async function getDirectionData() {
