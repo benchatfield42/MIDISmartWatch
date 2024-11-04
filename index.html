@@ -88,10 +88,10 @@
             const key = document.getElementById(`key${d}`);
             if (key) key.classList.add("active");
 
-            // Remove the highlight after 500ms (duration of the note)
+            // Remove the highlight after 200ms (duration of the note)
             setTimeout(() => {
                 if (key) key.classList.remove("active");
-            }, 500);
+            }, 200);
         }
 
         async function getDirectionData() {
@@ -107,8 +107,8 @@
             }
         }
 
-        // Poll the server every 500ms for new direction data
-        setInterval(getDirectionData, 500);
+        // Poll the server every 30ms for new direction data
+        setInterval(getDirectionData, 30);
     </script>
 </body>
 </html>
