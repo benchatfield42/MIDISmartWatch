@@ -8,3 +8,5 @@ Low latency is important for musical expression and I am aiming for 10 to 15ms w
 
 ![image](https://github.com/user-attachments/assets/6911817a-3bd2-4631-82bd-4b9270ef570c)
 
+To activate web audio:
+chrome.exe --autoplay-policy=no-user-gesture-required
