@@ -6,3 +6,5 @@ Low latency is important for musical expression and I am aiming for 10 to 15ms w
 
 ![image](https://github.com/user-attachments/assets/181c7d6a-a148-4620-9193-718a8b03ec71)
 
+![image](https://github.com/user-attachments/assets/6911817a-3bd2-4631-82bd-4b9270ef570c)
+
