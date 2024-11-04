@@ -19,7 +19,7 @@ let udpReceivedData = {};
 app.get('/sendData', (req, res) => {
     const queryObject = req.query;
 
-    const latency = queryObject.l; // Fixed typo from quertyObject to queryObject
+    const latency = queryObject.l; 
     const x = queryObject.x;
     const y = queryObject.y;
     const z = queryObject.z;
@@ -61,7 +61,7 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`HTTP server running on port ${PORT}`));
 
 // Create a UDP server to handle incoming UDP data
-const udpPort = 8081; // You can set this to any available port
+const udpPort = 8081; 
 const udpServer = dgram.createSocket('udp4');
 
 udpServer.on('message', (msg, rinfo) => {

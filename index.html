@@ -74,7 +74,6 @@
             oscillator.start();
             oscillator.stop(audioContext.currentTime + 0.5);
 
-            // Highlight the key
             highlightKey(d);
         }
 
@@ -107,7 +106,7 @@
             }
         }
 
-        // Poll the server every 30ms for new direction data
+        // Check the server every 30ms for new direction data
         setInterval(getDirectionData, 30);
     </script>
 </body>
