@@ -3,6 +3,7 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const dgram = require('dgram');
+
 const app = express();
 
 // Use CORS middleware
@@ -11,17 +12,23 @@ app.use(cors()); // Allow all origins
 // Middleware to parse JSON requests
 app.use(express.json());
 
+// Store received UDP data globally
+let udpReceivedData = {};
+
 // Define a route to handle incoming data via HTTP
 app.get('/sendData', (req, res) => {
     const queryObject = req.query;
 
-    const latency = quertyObject.l;
+    const latency = queryObject.l; // Fixed typo from quertyObject to queryObject
     const x = queryObject.x;
     const y = queryObject.y;
     const z = queryObject.z;
     const direction = queryObject.d;
 
-    console.log(`Received HTTP data: Latency=${l}, X=${x}, Y=${y}, Z=${z}, Direction=${d}`);
+    console.log(`Received HTTP data: Latency=${latency}, X=${x}, Y=${y}, Z=${z}, Direction=${direction}`);
+
+    // Optionally, you can store HTTP data as well
+    udpReceivedData = { latency, x, y, z, direction }; // Store the latest received HTTP data
 
     res.status(200).send('Data received successfully');
 });
@@ -65,6 +72,9 @@ udpServer.on('message', (msg, rinfo) => {
     });
 
     console.log("Processed UDP data:", receivedData);
+
+    // Optionally, store the latest received UDP data globally
+    udpReceivedData = receivedData;
 });
 
 // Bind the UDP server to listen on the specified port
