@@ -2,8 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-const url = require('url');
-
+const dgram = require('dgram');
 const app = express();
 
 // Use CORS middleware
@@ -12,9 +11,8 @@ app.use(cors()); // Allow all origins
 // Middleware to parse JSON requests
 app.use(express.json());
 
-// Define a route to handle incoming data
+// Define a route to handle incoming data via HTTP
 app.get('/sendData', (req, res) => {
-    // Extract query parameters
     const queryObject = req.query;
 
     const x = queryObject.x;
@@ -22,8 +20,7 @@ app.get('/sendData', (req, res) => {
     const z = queryObject.z;
     const direction = queryObject.direction;
 
-    // Process the data as needed
-    console.log(`Received data: X=${x}, Y=${y}, Z=${z}, Direction=${direction}`);
+    console.log(`Received HTTP data: X=${x}, Y=${y}, Z=${z}, Direction=${direction}`);
 
     res.status(200).send('Data received successfully');
 });
@@ -45,6 +42,31 @@ app.use((req, res) => {
     res.status(404).send('Not Found');
 });
 
-// Start the server
+// Start the HTTP server
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`HTTP server running on port ${PORT}`));
+
+// Create a UDP server to handle incoming UDP data
+const udpPort = 8081; // You can set this to any available port
+const udpServer = dgram.createSocket('udp4');
+
+udpServer.on('message', (msg, rinfo) => {
+    console.log(`Received UDP data from ${rinfo.address}:${rinfo.port} - ${msg}`);
+
+    // Assuming the message is sent in "key=value" format, separated by '&'
+    const dataStr = msg.toString();
+    const dataEntries = dataStr.split('&');
+    const receivedData = {};
+
+    dataEntries.forEach(entry => {
+        const [key, value] = entry.split('=');
+        receivedData[key] = value;
+    });
+
+    console.log("Processed UDP data:", receivedData);
+});
+
+// Bind the UDP server to listen on the specified port
+udpServer.bind(udpPort, () => {
+    console.log(`UDP server listening on port ${udpPort}`);
+});

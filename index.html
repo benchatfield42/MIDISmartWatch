@@ -96,7 +96,7 @@
 
         async function getDirectionData() {
             try {
-                const response = await fetch("http://localhost:8080/getData");
+                const response = await fetch("http://54.234.131.203:8080/getData");
                 const data = await response.json();
                 const direction = data.direction;
                 if (direction >= 1 && direction <= 8) {
