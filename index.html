@@ -132,10 +132,13 @@
             const d = parseInt(data.direction);
 
             if (d !== prevD && d >= 1 && d <= 8) { 
-                playNoteWithVisual(d);
-            }
-            prevD = d;
-        };
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(() => {
+                    playNoteWithVisual(d);
+                    prevD = d;
+            }, 100); // Adjust delay as needed
+        }
+    };
 
         ws.onerror = (error) => {
             console.error("WebSocket error:", error);
