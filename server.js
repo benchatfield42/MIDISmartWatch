@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-const dgram = require('dgram');
+const WebSocket = require('ws');
 
 const app = express();
 
@@ -11,33 +11,6 @@ app.use(cors()); // Allow all origins
 
 // Middleware to parse JSON requests
 app.use(express.json());
-
-// Store received UDP data globally
-let udpReceivedData = {};
-
-// Define a route to handle incoming data via HTTP
-app.get('/sendData', (req, res) => {
-    const queryObject = req.query;
-
-    const latency = queryObject.l; 
-    const x = queryObject.x;
-    const y = queryObject.y;
-    const z = queryObject.z;
-    const direction = queryObject.d;
-
-    console.log(`Received HTTP data: Latency=${latency}, X=${x}, Y=${y}, Z=${z}, Direction=${direction}`);
-
-    // Store the latest received HTTP data
-    udpReceivedData = { latency, x, y, z, direction };
-
-    res.status(200).send('Data received successfully');
-});
-
-// New endpoint to fetch the latest direction data
-app.get('/getData', (req, res) => {
-    // Respond with the latest received data
-    res.json(udpReceivedData);
-});
 
 // Serve the index.html file
 app.get('/', (req, res) => {
@@ -51,39 +24,44 @@ app.get('/', (req, res) => {
     });
 });
 
-// Handle 404 for any other requests
-app.use((req, res) => {
-    res.status(404).send('Not Found');
-});
-
 // Start the HTTP server
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log(`HTTP server running on port ${PORT}`));
+const server = app.listen(PORT, () => console.log(`HTTP server running on port ${PORT}`));
 
-// Create a UDP server to handle incoming UDP data
-const udpPort = 8081; 
-const udpServer = dgram.createSocket('udp4');
+// Create a WebSocket server
+const wss = new WebSocket.Server({ server });
 
-udpServer.on('message', (msg, rinfo) => {
-    console.log(`Received UDP data from ${rinfo.address}:${rinfo.port} - ${msg}`);
+// Store the most recent data
+let latestData = {};
 
-    // Assuming the message is sent in "key=value" format, separated by '&'
-    const dataStr = msg.toString();
-    const dataEntries = dataStr.split('&');
-    const receivedData = {};
+// Handle WebSocket connections
+wss.on('connection', (ws) => {
+    console.log('New WebSocket connection');
 
-    dataEntries.forEach(entry => {
-        const [key, value] = entry.split('=');
-        receivedData[key] = value;
+    // Send the latest data to the client when they connect
+    if (latestData) {
+        ws.send(JSON.stringify(latestData));
+    }
+
+    ws.on('message', (message) => {
+        // Process incoming data
+        const receivedData = JSON.parse(message);
+        const { latency, x, y, z, direction } = receivedData;
+
+        console.log(`Received WebSocket data: Latency=${latency}, X=${x}, Y=${y}, Z=${z}, Direction=${direction}`);
+
+        // Update the latest data
+        latestData = { latency, x, y, z, direction };
+
+        // Broadcast to all connected clients
+        wss.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(JSON.stringify(latestData));
+            }
+        });
     });
 
-    console.log("Processed UDP data:", receivedData);
-
-    // Store the latest received UDP data globally
-    udpReceivedData = receivedData;
-});
-
-// Bind the UDP server to listen on the specified port
-udpServer.bind(udpPort, () => {
-    console.log(`UDP server listening on port ${udpPort}`);
+    ws.on('close', () => {
+        console.log('WebSocket connection closed');
+    });
 });
