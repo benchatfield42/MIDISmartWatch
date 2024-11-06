@@ -93,13 +93,17 @@
             }, 250);
         }
 
+        let prevD;
         async function getDirectionData() {
             try {
                 const response = await fetch("http://18.234.229.144:8080/getData");
                 const data = await response.json();
                 const d = data.d;
-                if (d >= 1 && d <= 8) {
-                    playNoteWithVisual(d);
+                prevD = d;
+                if (prevD != d) {
+                    if (d >= 1 && d <= 8) {
+                        playNoteWithVisual(d);
+                    }
                 }
             } catch (error) {
                 console.error("Failed to fetch direction data:", error);
