@@ -104,9 +104,9 @@
 
         function highlightKey(d) {
             // Remove active class from all keys
-            for (let i = 1; i <= 8; i++) {
-                document.getElementById(`key${i}`).classList.remove("active");
-            }
+            // for (let i = 1; i <= 8; i++) {
+            //     document.getElementById(`key${i}`).classList.remove("active");
+            // }
 
             // Add active class to the current key
             const key = document.getElementById(`key${d}`);
@@ -119,7 +119,6 @@
         }
 
         let prevD;
-        let debounceTimeout;
 
         // Set up WebSocket connection
         const ws = new WebSocket("ws://18.234.229.144:8080"); // Replace with your server's WebSocket URL
@@ -133,13 +132,10 @@
             const d = parseInt(data.direction);
 
             if (d !== prevD && d >= 1 && d <= 8) { 
-                clearTimeout(debounceTimeout);
-                debounceTimeout = setTimeout(() => {
                     playNoteWithVisual(d);
-                    prevD = d;
-            }, 100); // Adjust delay as needed
-        }
-    };
+            }
+            prevD = d;
+        };
 
         ws.onerror = (error) => {
             console.error("WebSocket error:", error);
