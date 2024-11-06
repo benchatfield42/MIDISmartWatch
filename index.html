@@ -62,7 +62,7 @@
 
             // Play the note
             const oscillator = audioContext.createOscillator();
-            oscillator.type = 'sine';
+            oscillator.type = 'saw';
             oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
 
             const gainNode = audioContext.createGain();
