@@ -43,14 +43,14 @@
     <script>
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
         const scaleFrequencies = {
-            1: 293.66,  // D (D4)
-            2: 329.63,  // E (E4)
-            3: 349.23,  // F (F4)
+            1: 261.63,  // C (C4)
+            2: 293.66,  // D (D4)
+            3: 329.63,  // E (E4)
             4: 392.00,  // G (G4)
-            5: 440.00,  // A (A4)
-            6: 493.88,  // B (B4)
-            7: 523.25,  // C (C5)
-            8: 587.33   // D (D5)
+            5: 493.88,  // B (B4)
+            6: 523.25,  // C (C5)
+            7: 587.33,  // D (D5)
+            8: 659.26,  // E (E5)
             // 1: 261.63, // C4
             // 2: 293.66, // D4
             // 3: 329.63, // E4
@@ -76,7 +76,7 @@
             // Create LFO for frequency modulation
             const lfo = audioContext.createOscillator();
             lfo.type = 'sine';
-            lfo.frequency.setValueAtTime(432, audioContext.currentTime); // Low frequency for vibrato effect
+            lfo.frequency.setValueAtTime(10000, audioContext.currentTime); // Low frequency for vibrato effect
 
             const lfoGain = audioContext.createGain();
             lfoGain.gain.value = 20; // Modulation depth in Hz
@@ -87,7 +87,7 @@
             const gainNode = audioContext.createGain();
             gainNode.gain.setValueAtTime(0, audioContext.currentTime);
             gainNode.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.1); // Volume swell
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.6); // Fade out
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 1.5); // Fade out
 
             // Connect nodes
             oscillator.connect(gainNode);
