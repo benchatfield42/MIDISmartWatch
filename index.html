@@ -108,8 +108,8 @@
 
             if (d !== prevD && d >= 1 && d <= 8) { 
                 playNoteWithVisual(d);
-                prevD = d;
             }
+            prevD = d;
         };
 
         ws.onerror = (error) => {
