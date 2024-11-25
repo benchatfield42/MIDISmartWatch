@@ -12,6 +12,23 @@ app.use(cors()); // Allow all origins
 // Middleware to parse JSON requests
 app.use(express.json());
 
+app.get("/getPublicIP", (req, res) => {
+    https.get("https://api.ipify.org?format=json", (response) => {
+        let data = "";
+
+        response.on("data", (chunk) => {
+            data += chunk;
+        });
+
+        response.on("end", () => {
+            const publicIP = JSON.parse(data).ip;
+            res.send({ publicIP }); // Send the public IP as a JSON response
+        });
+    }).on("error", (err) => {
+        res.status(500).send({ error: err.message });
+    });
+});
+
 // Serve the index.html file
 app.get('/', (req, res) => {
     fs.readFile(path.join(__dirname, 'index.html'), (err, content) => {
