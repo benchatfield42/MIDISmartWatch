@@ -22,7 +22,7 @@
             font-weight: bold;
         }
         .key.active {
-            background-color: #00FF00; /* Green when active */
+            background-color: #00ff00; /* Green when active */
         }
     </style>
 </head>
@@ -123,7 +123,7 @@
         let prevD;
 
         // Set up WebSocket connection
-        const ws = new WebSocket("ws://54.89.130.81:8080"); // Replace with your server's WebSocket URL
+        const ws = new WebSocket("ws://websocket.local:8080"); // Replace with your server's WebSocket URL
 
         ws.onopen = () => {
             console.log("Connected to WebSocket server");
