@@ -21,13 +21,19 @@ app.get("/getPublicIP", (req, res) => {
         });
 
         response.on("end", () => {
-            const publicIP = JSON.parse(data).ip;
-            res.send({ publicIP }); // Send the public IP as a JSON response
+            try {
+                const publicIP = JSON.parse(data).ip;
+                res.json({ publicIP }); // Send the public IP as JSON
+            } catch (err) {
+                res.status(500).json({ error: "Failed to parse IP response" });
+            }
         });
     }).on("error", (err) => {
-        res.status(500).send({ error: err.message });
+        console.error("Error fetching public IP:", err.message);
+        res.status(500).json({ error: "Error fetching public IP" });
     });
 });
+
 
 // Serve the index.html file
 app.get('/', (req, res) => {
