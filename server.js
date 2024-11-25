@@ -3,6 +3,7 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const WebSocket = require('ws');
+const http = require('http');
 
 const app = express();
 
@@ -13,7 +14,7 @@ app.use(cors()); // Allow all origins
 app.use(express.json());
 
 app.get("/getPublicIP", (req, res) => {
-    https.get("https://api.ipify.org?format=json", (response) => {
+    http.get("https://api.ipify.org?format=json", (response) => {
         let data = "";
 
         response.on("data", (chunk) => {
