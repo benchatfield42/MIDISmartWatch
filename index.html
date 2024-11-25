@@ -122,8 +122,22 @@
 
         let prevD;
 
+        HTTPClient http;
+        http.begin("http://api.ipify.org"); // Public IP service
+        int httpResponseCode = http.GET();
+
+        if (httpResponseCode > 0) {
+            String publicIP = http.getString();
+            Serial.print("Public IP Address: ");
+            Serial.println(publicIP);
+        } else {
+            Serial.print("Error getting public IP: ");
+            Serial.println(httpResponseCode);
+        }
+
+        http.end();
         // Set up WebSocket connection
-        const ws = new WebSocket("ws://websocket.local:8080"); // Replace with your server's WebSocket URL
+        const ws = new WebSocket("ws://" + publicIP + ":8080"); // Replace with your server's WebSocket URL
 
         ws.onopen = () => {
             console.log("Connected to WebSocket server");
