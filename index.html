@@ -152,6 +152,8 @@
         ws.onclose = () => {
             console.log("WebSocket connection closed");
         };
+    })
+    .catch(error => console.error("Failed to get public IP:", error));
     </script>
 </body>
 </html>
