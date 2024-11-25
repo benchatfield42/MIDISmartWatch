@@ -122,11 +122,10 @@
 
         let prevD;
 
-        fetch("https://api.ipify.org?format=json")
-        .then(response => response.json())
-        .then(data => {
-            const publicIP = data.ip;
-            console.log("Public IP Address:", publicIP);
+        fetch("/getPublicIP")
+            .then(response => response.json())
+            .then(data => {
+            const publicIP = data.publicIP;
 
             // Initialize WebSocket connection
             const ws = new WebSocket(`ws://${publicIP}:8080`);
@@ -152,8 +151,8 @@
         ws.onclose = () => {
             console.log("WebSocket connection closed");
         };
+    .catch(error => console.error("Error fetching public IP:", error));
     })
-    .catch(error => console.error("Failed to get public IP:", error));
     </script>
 </body>
 </html>
