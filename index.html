@@ -24,9 +24,42 @@
         .key.active {
             background-color: #00ff00; /* Green when active */
         }
+        #audio-popup {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+        }
+        #start-audio {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #start-audio:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
+    <div id="audio-popup">
+        <div>
+            <p>Click below to start the audio system</p>
+            <button id="start-audio">Start Audio</button>
+        </div>
+    </div>
     <h1>Playing Notes from T-Watch Direction Data</h1>
 
     <div class="piano" id="piano">
@@ -41,7 +74,17 @@
     </div>
 
     <script>
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let audioContext; // Declare globally for later initialization
+
+        // Event listener added to start audio system after user interaction
+        document.getElementById("start-audio").addEventListener("click", () => {
+        // Initialize AudioContext on user interaction
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        console.log("AudioContext initialized");
+        // Hide the popup after initialization
+        document.getElementById("audio-popup").style.display = "none";
+    });
+
         const scaleFrequencies = {
             1: 261.63,  // C (C4)
             2: 293.66,  // D (D4)
@@ -105,11 +148,6 @@
         }
 
         function highlightKey(d) {
-            // Remove active class from all keys
-            // for (let i = 1; i <= 8; i++) {
-            //     document.getElementById(`key${i}`).classList.remove("active");
-            // }
-
             // Add active class to the current key
             const key = document.getElementById(`key${d}`);
             if (key) key.classList.add("active");
