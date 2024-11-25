@@ -74,9 +74,7 @@
     </div>
 
     <script>
-        let audioContext; // Declare globally for later initialization
-
-        // Event listener added to start audio system after user interaction
+        let audioContext;
         document.getElementById("start-audio").addEventListener("click", () => {
         // Initialize AudioContext on user interaction
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -158,8 +156,6 @@
             }, 500);
         }
 
-        let prevD;
-
         fetch("/getPublicIP")
             .then(response => response.json())
             .then(data => {
@@ -171,6 +167,8 @@
         ws.onopen = () => {
             console.log("Connected to WebSocket server");
         };
+
+        let prevD;
 
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
