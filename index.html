@@ -15,14 +15,14 @@
             width: 40px;
             height: 150px;
             margin: 2px;
-            background-color: white;
-            border: 1px solid #333;
+            background-color: rgb(186, 186, 186);
+            border: 3px solid #000000;
             text-align: center;
             line-height: 150px;
             font-weight: bold;
         }
         .key.active {
-            background-color: #00ffea; /* Green when active */
+            background-color: #ff0000; 
         }
         #audio-popup {
             display: flex;
@@ -41,7 +41,7 @@
             z-index: 9999;
         }
         #start-audio {
-            background-color: #6a00ff;
+            background-color: #3cff00;
             color: white;
             padding: 10px 20px;
             border: none;
@@ -49,15 +49,15 @@
             cursor: pointer;
         }
         #start-audio:hover {
-            background-color: #7d00b3;
+            background-color: #3ba60d;
         }
     </style>
 </head>
 <body>
     <div id="audio-popup">
         <div>
-            <p>Click below to start the audio system</p>
-            <button id="start-audio">Start Audio</button>
+            <p>Click to start audio</p>
+            <button id="start-audio">Start</button>
         </div>
     </div>
     <h1>Playing Notes from T-Watch Direction Data</h1>
