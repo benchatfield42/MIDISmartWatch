@@ -117,7 +117,7 @@
             // Create LFO for frequency modulation
             const lfo = audioContext.createOscillator();
             lfo.type = 'sine';
-            lfo.frequency.setValueAtTime(10000, audioContext.currentTime); // Low frequency for vibrato effect
+            lfo.frequency.setValueAtTime(10, audioContext.currentTime); // Low frequency for vibrato effect
 
             const lfoGain = audioContext.createGain();
             lfoGain.gain.value = 20; // Modulation depth in Hz
