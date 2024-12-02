@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web BLE Piano Display</title>
+    <style>
+        /* Piano styling (same as before) */
+        .piano {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .key {
+            width: 40px;
+            height: 150px;
+            margin: 2px;
+            background-color: rgb(186, 186, 186);
+            border: 3px solid #000000;
+            text-align: center;
+            line-height: 150px;
+            font-weight: bold;
+        }
+        .key.active {
+            background-color: #ff0000; 
+        }
+        #audio-popup {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+        }
+        #start-audio {
+            background-color: #3cff00;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #start-audio:hover {
+            background-color: #3ba60d;
+        }
+    </style>
+</head>
+<body>
+    <div id="audio-popup">
+        <div>
+            <p>Click to start audio</p>
+            <button id="start-audio">Start</button>
+        </div>
+    </div>
+    <h1>Playing Notes from BLE Direction Data</h1>
+
+    <button id="connect-btn">Connect to BLE Device</button>
+
+    <div class="piano" id="piano">
+        <div class="key" id="key1">1</div>
+        <div class="key" id="key2">2</div>
+        <div class="key" id="key3">3</div>
+        <div class="key" id="key4">4</div>
+        <div class="key" id="key5">5</div>
+        <div class="key" id="key6">6</div>
+        <div class="key" id="key7">7</div>
+        <div class="key" id="key8">8</div>
+    </div>
+
+    <script>
+        let audioContext;
+        let bluetoothDevice;
+        let characteristic;
+
+        const scaleFrequencies = {
+            1: 261.63,  // C (C4)
+            2: 293.66,  // D (D4)
+            3: 329.63,  // E (E4)
+            4: 392.00,  // G (G4)
+            5: 493.88,  // B (B4)
+            6: 523.25,  // C (C5)
+            7: 587.33,  // D (D5)
+            8: 659.26   // E (E5)
+        };
+
+        document.getElementById("start-audio").addEventListener("click", () => {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            console.log("AudioContext initialized");
+            document.getElementById("audio-popup").style.display = "none";
+        });
+
+        async function connectToDevice() {
+            try {
+                console.log("Requesting BLE device...");
+                bluetoothDevice = await navigator.bluetooth.requestDevice({
+                    acceptAllDevices: true,
+                    optionalServices: ['your-service-uuid'] // Replace with your BLE service UUID
+                });
+
+                const server = await bluetoothDevice.gatt.connect();
+                console.log("Connected to GATT server");
+
+                const service = await server.getPrimaryService('your-service-uuid'); // Replace with your BLE service UUID
+                characteristic = await service.getCharacteristic('your-characteristic-uuid'); // Replace with your BLE characteristic UUID
+                
+                characteristic.addEventListener('characteristicvaluechanged', handleNotifications);
+                await characteristic.startNotifications();
+                console.log("Notifications started");
+
+            } catch (error) {
+                console.error("Error connecting to BLE device:", error);
+            }
+        }
+
+        function handleNotifications(event) {
+            const value = event.target.value;
+            const direction = new Uint8Array(value)[0]; // Assuming direction is a single byte
+            console.log("Received direction:", direction);
+            if (direction >= 1 && direction <= 8) {
+                playNoteWithVisual(direction);
+            }
+        }
+
+        function playNoteWithVisual(direction) {
+            const frequency = scaleFrequencies[direction];
+            if (!frequency) {
+                console.error("Invalid direction received.");
+                return;
+            }
+
+            const oscillator = audioContext.createOscillator();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+
+            const gainNode = audioContext.createGain();
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.1);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 1.5);
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.6);
+
+            highlightKey(direction);
+        }
+
+        function highlightKey(direction) {
+            const key = document.getElementById(`key${direction}`);
+            if (key) key.classList.add("active");
+            setTimeout(() => {
+                if (key) key.classList.remove("active");
+            }, 500);
+        }
+
+        document.getElementById("connect-btn").addEventListener("click", connectToDevice);
+    </script>
+</body>
+</html>
