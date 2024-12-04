@@ -220,13 +220,9 @@
 
                     console.log(`Device ID: ${deviceID}, Direction: ${d}`); // Log extracted values
 
-                    if (deviceID === 1) {
-                        if (d >= 1 && d <= 8) { 
-                            playNoteWithVisual(d); // Call the function to play the note
-                        } else {
-                            console.warn(`Invalid direction from Watch1: ${d}`);
-                        }
-                    } else if (deviceID === 2) {
+                    let prevD;
+
+                    if (deviceID === 2) {  // Select scale before note
                         if (d === 0) {
                             currentScale = scaleFrequencies.scale1; 
                             console.log("Scale changed to: scale1");
@@ -236,6 +232,13 @@
                         } else {
                             console.warn(`Invalid scale selection from Watch2: ${d}`);
                         }
+                    } else if (deviceID === 1) {
+                        if (d >= 1 && d <= 8 && d !== prevD) { 
+                            playNoteWithVisual(d); // Call the function to play the note
+                        } else {
+                            console.warn(`Invalid direction from Watch1: ${d}`);
+                        }
+                        prevD = d;
                     }
                 } catch (error) {
                     console.error("Error processing WebSocket message:", error);
