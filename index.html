@@ -75,7 +75,6 @@
 
     <script>
         let audioContext;
-        let firstWatch = true; // Flag to differentiate the watches
         document.getElementById("start-audio").addEventListener("click", () => {
         // Initialize AudioContext on user interaction
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -85,63 +84,26 @@
     });
 
         const scaleFrequencies = {
-            scale1: {
-                1: 261.63,  // C (C4)
-                2: 293.66,  // D (D4)
-                3: 329.63,  // E (E4)
-                4: 392.00,  // G (G4)
-                5: 493.88,  // B (B4)
-                6: 523.25,  // C (C5)
-                7: 587.33,  // D (D5)
-                8: 659.26,  // E (E5)
-            },
-            scale2: {
-                1: 261.63,  // C (C4)
-                2: 329.63,  // E (E4)
-                3: 392.00,  // G (G4)
-                4: 523.25,  // B (B4)
-                5: 587.33,  // D (D5)
-                6: 698.46,  // F# (F#5)
-                7: 783.99,  // G# (G#5)
-                8: 987.77,  // B (B5) (octave higher)
-            },
-            minor7: {
-                1: 261.63,  // C (C4)
-                2: 311.13,  // D# (D#4)
-                3: 392.00,  // G (G4)
-                4: 466.16,  // G# (G4)
-                5: 523.25,  // C (C5)
-                6: 554.37,  // D# (D#5)
-                7: 622.25,  // F (F5)
-                8: 739.99,  // B (B5)
-            },
-            dominant7: {
-                1: 261.63,  // C (C4)
-                2: 349.23,  // F (F4)
-                3: 392.00,  // G (G4)
-                4: 554.37,  // D# (D#5)
-                5: 622.25,  // F# (F5)
-                6: 739.99,  // B (B5)
-                7: 830.61,  // C# (C#5)
-                8: 987.77,  // G (G5)
-            },
-            dorian: {
-                1: 261.63,  // C (C4)
-                2: 293.66,  // D (D4)
-                3: 349.23,  // F (F4)
-                4: 392.00,  // G (G4)
-                5: 440.00,  // A (A4)
-                6: 523.25,  // C (C5)
-                7: 587.33,  // D (D5)
-                8: 698.46,  // F (F5)
-            },
-
+            1: 261.63,  // C (C4)
+            2: 293.66,  // D (D4)
+            3: 329.63,  // E (E4)
+            4: 392.00,  // G (G4)
+            5: 493.88,  // B (B4)
+            6: 523.25,  // C (C5)
+            7: 587.33,  // D (D5)
+            8: 659.26,  // E (E5)
+            // 1: 261.63, // C4
+            // 2: 293.66, // D4
+            // 3: 329.63, // E4
+            // 4: 349.23, // F4
+            // 5: 392.00, // G4
+            // 6: 440.00, // A4
+            // 7: 493.88, // B4
+            // 8: 523.25  // C5
         };
 
-        let currentScale = scaleFrequencies;
-
         function playNoteWithVisual(d) {
-            const frequency = currentScale[d];
+            const frequency = scaleFrequencies[d];
             if (!frequency) {
                 console.error("Invalid direction received.");
                 return;
@@ -202,42 +164,31 @@
             // Initialize WebSocket connection
             const ws = new WebSocket(`ws://${publicIP}:8080`);
 
-            ws.onopen = () => {
-                console.log("Connected to WebSocket server");
-            };
+        ws.onopen = () => {
+            console.log("Connected to WebSocket server");
+        };
 
-            let prevD;
+        let prevD;
 
-            ws.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                const deviceID = data.deviceID; // Get device ID
-                const d = parseInt(data.direction);
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            const d = parseInt(data.direction);
 
-                // Check if the message is from the first watch or second watch
-                if (deviceID === "Watch1") {
-                    if (d !== prevD && d >= 1 && d <= 8) { 
-                        playNoteWithVisual(d); // First watch plays the note
-                    }
-                } else if (deviceID === "Watch2") {
-                    // Second watch can modify scale frequencies based on direction
-                    if (d === 1) {
-                        currentScale = scaleFrequencies.scale1; 
-                    } else if (d === 2) {
-                        currentScale = scaleFrequencies.scale2;
-                    } 
-                }
-                prevD = d;
-            };
+            if (d !== prevD && d >= 1 && d <= 8) { 
+                    playNoteWithVisual(d);
+            }
+            prevD = d;
+        };
 
-            ws.onerror = (error) => {
-                console.error("WebSocket error:", error);
-            };
+        ws.onerror = (error) => {
+            console.error("WebSocket error:", error);
+        };
 
-            ws.onclose = () => {
-                console.log("WebSocket connection closed");
-            };
-        })
-        .catch(error => console.error("Error fetching public IP:", error));
+        ws.onclose = () => {
+            console.log("WebSocket connection closed");
+        };
+    })
+    .catch(error => console.error("Error fetching public IP:", error));
     </script>
 </body>
 </html>
