@@ -205,28 +205,41 @@
             ws.onopen = () => {
                 console.log("Connected to WebSocket server");
             };
-
-            let prevD;
-
+            
             ws.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                const deviceID = data.deviceID; // Get device ID
-                const d = parseInt(data.direction);
+                try {
+                    // Parse the incoming WebSocket data
+                    const data = JSON.parse(event.data);
 
-                // Check if the message is from the first watch or second watch
-                if (deviceID === "Watch1") {
-                    if (d !== prevD && d >= 1 && d <= 8) { 
-                        playNoteWithVisual(d); // First watch plays the note
+                    // Log the raw event and the parsed data
+                    console.log("Raw WebSocket message:", event.data);
+                    console.log("Parsed WebSocket message:", data);
+
+                    const deviceID = data.deviceID; // Get device ID
+                    const d = parseInt(data.direction);
+
+                    console.log(`Device ID: ${deviceID}, Direction: ${d}`); // Log extracted values
+
+                    if (deviceID === "Watch1") {
+                        if (d >= 1 && d <= 8) { 
+                            playNoteWithVisual(d); // Call the function to play the note
+                        } else {
+                            console.warn(`Invalid direction from Watch1: ${d}`);
+                        }
+                    } else if (deviceID === "Watch2") {
+                        if (d === 1) {
+                            currentScale = scaleFrequencies.scale1; 
+                            console.log("Scale changed to: scale1");
+                        } else if (d === 2) {
+                            currentScale = scaleFrequencies.scale2;
+                            console.log("Scale changed to: scale2");
+                        } else {
+                            console.warn(`Invalid scale selection from Watch2: ${d}`);
+                        }
                     }
-                } else if (deviceID === "Watch2") {
-                    // Second watch can modify scale frequencies based on direction
-                    if (d === 1) {
-                        currentScale = scaleFrequencies.scale1; 
-                    } else if (d === 2) {
-                        currentScale = scaleFrequencies.scale2;
-                    } 
+                } catch (error) {
+                    console.error("Error processing WebSocket message:", error);
                 }
-                prevD = d;
             };
 
             ws.onerror = (error) => {

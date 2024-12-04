@@ -37,7 +37,7 @@ app.get("/getPublicIP", (req, res) => {
 
 // Serve the index.html file
 app.get('/', (req, res) => {
-    fs.readFile(path.join(__dirname, 'index.html'), (err, content) => {
+    fs.readFile(path.join(__dirname, 'index2.html'), (err, content) => {
         if (err) {
             res.status(500).send('Server Error');
             return;
