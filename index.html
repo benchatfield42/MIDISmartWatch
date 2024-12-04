@@ -156,8 +156,8 @@
                 const publicIP = data.publicIP;
 
                 // Initialize WebSocket connection for both watches
-                const ws1 = new WebSocket(`ws://${publicIP}:8080`); // Watch 1 for note selection
-                const ws2 = new WebSocket(`ws://${publicIP}:8081`); // Watch 2 for scale bank selection
+                const ws1 = new WebSocket(`ws://${publicIP}:8080/notes`); // Watch 1 for note selection
+                const ws2 = new WebSocket(`ws://${publicIP}:8080/scale`); // Watch 2 for scale bank selection
 
                 ws1.onopen = () => {
                     console.log("Connected to WebSocket server for Watch 1 (Notes)");
