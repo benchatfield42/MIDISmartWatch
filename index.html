@@ -85,18 +85,63 @@
     });
 
         const scaleFrequencies = {
-            1: 261.63,  // C (C4)
-            2: 293.66,  // D (D4)
-            3: 329.63,  // E (E4)
-            4: 392.00,  // G (G4)
-            5: 493.88,  // B (B4)
-            6: 523.25,  // C (C5)
-            7: 587.33,  // D (D5)
-            8: 659.26,  // E (E5)
+            scale1: {
+                1: 261.63,  // C (C4)
+                2: 293.66,  // D (D4)
+                3: 329.63,  // E (E4)
+                4: 392.00,  // G (G4)
+                5: 493.88,  // B (B4)
+                6: 523.25,  // C (C5)
+                7: 587.33,  // D (D5)
+                8: 659.26,  // E (E5)
+            },
+            scale2: {
+                1: 261.63,  // C (C4)
+                2: 329.63,  // E (E4)
+                3: 392.00,  // G (G4)
+                4: 523.25,  // B (B4)
+                5: 587.33,  // D (D5)
+                6: 698.46,  // F# (F#5)
+                7: 783.99,  // G# (G#5)
+                8: 987.77,  // B (B5) (octave higher)
+            },
+            minor7: {
+                1: 261.63,  // C (C4)
+                2: 311.13,  // D# (D#4)
+                3: 392.00,  // G (G4)
+                4: 466.16,  // G# (G4)
+                5: 523.25,  // C (C5)
+                6: 554.37,  // D# (D#5)
+                7: 622.25,  // F (F5)
+                8: 739.99,  // B (B5)
+            },
+            dominant7: {
+                1: 261.63,  // C (C4)
+                2: 349.23,  // F (F4)
+                3: 392.00,  // G (G4)
+                4: 554.37,  // D# (D#5)
+                5: 622.25,  // F# (F5)
+                6: 739.99,  // B (B5)
+                7: 830.61,  // C# (C#5)
+                8: 987.77,  // G (G5)
+            },
+            dorian: {
+                1: 261.63,  // C (C4)
+                2: 293.66,  // D (D4)
+                3: 349.23,  // F (F4)
+                4: 392.00,  // G (G4)
+                5: 440.00,  // A (A4)
+                6: 523.25,  // C (C5)
+                7: 587.33,  // D (D5)
+                8: 698.46,  // F (F5)
+            },
+
         };
 
+        let currentScale = scaleFrequencies;
+
         function playNoteWithVisual(d) {
-            const frequency = scaleFrequencies[d];
+            const frequency = currentScale[d];
             if (!frequency) {
                 console.error("Invalid direction received.");
                 return;
@@ -176,8 +221,10 @@
                 } else if (deviceID === "Watch2") {
                     // Second watch can modify scale frequencies based on direction
                     if (d === 1) {
-                        // For example, select a different bank of scale frequencies
-                        scaleFrequencies[1] = 220.00;  // Change frequency for watch 2's direction
+                        currentScale = scaleFrequencies.scale1; 
+                    }else if (d == 2) {
+                        currentScale = scaleFrequenies.scale2;
+                    } 
                     }
                 }
                 prevD = d;
