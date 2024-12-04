@@ -231,8 +231,6 @@
                     } else if (deviceID === 1) {
                         if (d >= 1 && d <= 8 && d !== prevD) { 
                             playNoteWithVisual(d); // Call the function to play the note
-                        } else {
-                            console.warn(`Invalid direction from Watch1: ${d}`);
                         }
                         prevD = d;
                     }
