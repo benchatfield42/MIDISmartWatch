@@ -22,6 +22,6 @@ Using Websockets I have been able to consistantly stay under 15ms even while usi
 
 ![image](https://github.com/user-attachments/assets/6911817a-3bd2-4631-82bd-4b9270ef570c)
 
-To activate web audio:
+To activate web audio (no longer needed):
 
 `chrome.exe --autoplay-policy=no-user-gesture-required`
