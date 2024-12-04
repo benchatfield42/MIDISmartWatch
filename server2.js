@@ -52,7 +52,7 @@ const PORT = process.env.PORT || 8080;
 const server = app.listen(PORT, () => console.log(`HTTP server running on port ${PORT}`));
 
 // Create a WebSocket server
-const wss = new WebSocket({ server });
+const wss = new WebSocket.Server({ server });
 
 // Store the most recent data for each device
 const latestData = {};
