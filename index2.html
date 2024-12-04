@@ -205,22 +205,18 @@
             ws.onopen = () => {
                 console.log("Connected to WebSocket server");
             };
+
+            let prevD;
             
             ws.onmessage = (event) => {
                 try {
                     // Parse the incoming WebSocket data
                     const data = JSON.parse(event.data);
 
-                    // Log the raw event and the parsed data
-                    console.log("Raw WebSocket message:", event.data);
-                    console.log("Parsed WebSocket message:", data);
-
                     const deviceID = data.deviceID; // Get device ID
                     const d = data.data.direction;
 
                     console.log(`Device ID: ${deviceID}, Direction: ${d}`); // Log extracted values
-
-                    let prevD;
 
                     if (deviceID === 2) {  // Select scale before note
                         if (d === 0) {
