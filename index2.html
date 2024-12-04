@@ -220,13 +220,13 @@
 
                     console.log(`Device ID: ${deviceID}, Direction: ${d}`); // Log extracted values
 
-                    if (deviceID === "Watch1") {
+                    if (deviceID === 1) {
                         if (d >= 1 && d <= 8) { 
                             playNoteWithVisual(d); // Call the function to play the note
                         } else {
                             console.warn(`Invalid direction from Watch1: ${d}`);
                         }
-                    } else if (deviceID === "Watch2") {
+                    } else if (deviceID === 2) {
                         if (d === 1) {
                             currentScale = scaleFrequencies.scale1; 
                             console.log("Scale changed to: scale1");
