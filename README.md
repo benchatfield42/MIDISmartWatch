@@ -11,7 +11,10 @@ Instructions:
   (Note when flashing you must enter your WIFI and AWS server public IP. If you flash 2 watches you must also change the deviceID from 1 to 2 for the second watch)
 7) Enter your AWS public IP + :8080 into your browser and you are ready to go.
 
-Low latency is important for musical expression and I am aiming for 10 to 15ms which I have been able to achieve using UDP. HTTP gave me latencies around 35ms locally and 400ms when sent to AWS. Using UDP there is no difference when sending to AWS as it maintained the low latency because there is no need for a response. Unfortunately I found that sending UDP at a rate of 10 to 15ms overwhelms the AWS server with my current configurations, but by limiting my latency to 30ms I was able to recieve data without being throttled. At 30ms there is also no fluctuations in the latency rate.
+Notes:
+
+Low latency is important for musical expression and I am aiming for 10 to 15ms which I have been able to achieve using UDP. HTTP gave me latencies around 35ms locally and 400ms when sent to AWS. Using UDP there is no difference when sending to AWS as it maintained the low latency because there is no need for a response. Unfortunately I found that sending UDP at a rate of 10 to 15ms overwhelms the AWS server with my current configurations, but by limiting my latency to 30ms I was able to recieve data without being throttled. At 30ms there is also no fluctuations in the latency rate. 
+Using Websockets I have been able to consistantly stay under 15ms even while using 2 watches at the same time on the same port which is very promising. For the future I could like to expand this project to use web BLE, which will eliminate the need to flash the watch every time you have a new AWS server or WIFI. 
 
 ![image](https://github.com/user-attachments/assets/b4f17029-b728-426f-adb4-05e5f9d9b2e5)
 
