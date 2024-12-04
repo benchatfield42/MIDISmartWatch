@@ -105,7 +105,7 @@
                 7: 783.99,  // G# (G#5)
                 8: 987.77,  // B (B5) (octave higher)
             },
-            minor7: {
+            scale3: {
                 1: 261.63,  // C (C4)
                 2: 311.13,  // D# (D#4)
                 3: 392.00,  // G (G4)
@@ -115,7 +115,7 @@
                 7: 622.25,  // F (F5)
                 8: 739.99,  // B (B5)
             },
-            dominant7: {
+            scale4: {
                 1: 261.63,  // C (C4)
                 2: 349.23,  // F (F4)
                 3: 392.00,  // G (G4)
@@ -125,7 +125,7 @@
                 7: 830.61,  // C# (C#5)
                 8: 987.77,  // G (G5)
             },
-            dorian: {
+            scale5: {
                 1: 261.63,  // C (C4)
                 2: 293.66,  // D (D4)
                 3: 349.23,  // F (F4)
@@ -221,12 +221,21 @@
                     if (deviceID === 2) {  // Select scale before note
                         if (d === 0) {
                             currentScale = scaleFrequencies.scale1; 
-                            console.log("Scale changed to: scale1");
+                            console.log("Scale 1");
                         } else if (d === 1) {
                             currentScale = scaleFrequencies.scale2;
-                            console.log("Scale changed to: scale2");
+                            console.log("Scale 2");
+                        } else if (d === 3) {
+                            currentScale = scaleFrequencies.scale3;
+                            console.log("Scale 3");
+                        } else if (d === 5) {
+                            currentScale = scaleFrequencies.scale4;
+                            console.log("Scale 4");
+                        } else if (d === 7) {
+                            currentScale = scaleFrequencies.scale5;
+                            console.log("Scale 5");
                         } else {
-                            console.warn(`Invalid scale selection from Watch2: ${d}`);
+                            console.warn(`No scale yet for: ${d}`);
                         }
                     } else if (deviceID === 1) {
                         if (d >= 1 && d <= 8 && d !== prevD) { 
