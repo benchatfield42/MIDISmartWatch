@@ -216,7 +216,7 @@
                     console.log("Parsed WebSocket message:", data);
 
                     const deviceID = data.deviceID; // Get device ID
-                    const d = parseInt(data.direction);
+                    const d = data.direction;
 
                     console.log(`Device ID: ${deviceID}, Direction: ${d}`); // Log extracted values
 
