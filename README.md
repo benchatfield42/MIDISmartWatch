@@ -1,4 +1,4 @@
-The goal of this project is to use the accelerometer data from a smart watch to control a synthesised web output. It lets you select 8 directions depending on the x and y values of the accelerometer, and each direction you tilt to plays a different note. When a second watch is connected it allows you to change the set of notes that will be played depending on direction. 
+The goal of this project is to use the accelerometer data from an ESP32-S3 smart watch (T-Watch-S3) to control a synthesised web output. It lets you select 8 directions depending on the x and y values of the accelerometer, and each direction you tilt to plays a different note. When a second watch is connected it allows you to change the set of notes that will be played depending on direction. 
 
 Instructions:
 
