@@ -101,15 +101,14 @@
                 console.log("Requesting BLE device...");
                 bluetoothDevice = await navigator.bluetooth.requestDevice({
                     acceptAllDevices: true,
-                    optionalServices: ['your-service-uuid'] // Replace with your BLE service UUID
+                    optionalServices: ['your-service-uuid'] 
                 });
 
                 const server = await bluetoothDevice.gatt.connect();
                 console.log("Connected to GATT server");
 
-                const service = await server.getPrimaryService('your-service-uuid'); // Replace with your BLE service UUID
-                characteristic = await service.getCharacteristic('your-characteristic-uuid'); // Replace with your BLE characteristic UUID
-                
+                const service = await server.getPrimaryService('your-service-uuid'); 
+                characteristic = await service.getCharacteristic('your-characteristic-uuid'); 
                 characteristic.addEventListener('characteristicvaluechanged', handleNotifications);
                 await characteristic.startNotifications();
                 console.log("Notifications started");
@@ -121,7 +120,7 @@
 
         function handleNotifications(event) {
             const value = event.target.value;
-            const direction = new Uint8Array(value)[0]; // Assuming direction is a single byte
+            const direction = new Uint8Array(value)[0]; 
             console.log("Received direction:", direction);
             if (direction >= 1 && direction <= 8) {
                 playNoteWithVisual(direction);
