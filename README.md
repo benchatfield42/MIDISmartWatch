@@ -11,6 +11,8 @@ Instructions:
   (Note when flashing you must enter your WIFI and AWS server public IP. If you flash 2 watches you must also change the deviceID from 1 to 2 for the second watch)
 7) Enter your AWS public IP + :8080 into your browser and you are ready to go.
 
+![IMG_9144](https://github.com/user-attachments/assets/5b98ca3b-22ad-4628-bdb1-9fee20e3dd26)
+
 Notes:
 
 Low latency is important for musical expression and I am aiming for 10 to 15ms which I have been able to achieve using UDP. HTTP gave me latencies around 35ms locally and 400ms when sent to AWS. Using UDP there is no difference when sending to AWS as it maintained the low latency because there is no need for a response. Unfortunately I found that sending UDP at a rate of 10 to 15ms overwhelms the AWS server with my current configurations, but by limiting my latency to 30ms I was able to recieve data without being throttled. At 30ms there is also no fluctuations in the latency rate. 
